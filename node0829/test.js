@@ -6,3 +6,11 @@
 console.log("나의 첫 노드 어플리케이션");
 console.log("현재 내가 실행중인 node.js 파일의 경로를 반환해주는 전역변수",__filename)
 console.log("현재 내가 실행중인 node.js 파일의 디렉토리 경로를 반환해주는 전역변수",__dirname)
+
+/*내장 객체 
+console, process, exports*/
+console.log(process.version,process.platform);
+
+var md = require("./custom/mymodule.js")//모듈 불러오기
+
+md.gugu(5);
