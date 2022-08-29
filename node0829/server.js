@@ -2,6 +2,7 @@
 var http=require("http");
 var fs = require("fs");//FileSystem module - 파일을 제어할 수 있고, 읽을 수 있다. 
 var qs = require("querystring");//전송된 query를 분석할때 사용하는 모듈
+var mysql = require("mysql");//mysql관련 모듈 //npm install mysql 콘솔에 실행
 //서버 객체 생성 
 var server = http.createServer(function(request,response){
     // console.log("client requeset was recieved");
@@ -25,26 +26,31 @@ var server = http.createServer(function(request,response){
             //response.end("<!DOCTYPE.html>");
             break;
         
-        case "/board/regist": 
-            console.log("글 등록할 예정");//글쓰기 요청 처리(post 파라미터 받고 db에 insert)
-            
-            //파라미터 받기
-            var postData="";
-            request.on("data",function(param){//클라이언트의 데이터가 도착하면
-                // console.log("param is ", ""+param);
-                postData  = postData+param;
-            });
-
-            request.on("end",function(){//모든 데이터를 다 받은 후 마지막 동작
-                console.log("최종 요청 데이터는", postData); 
-                var result = qs.parse(postData);
-                console.log(result.title,result.writer, result.content);//최종 데이터 파싱
-            });
-            break;
+        case "/board/regist": insert(request,response);break;
     }
     
 
 });
+//insert 글 쓰기 
+function insert(request,response){
+    console.log("글 등록할 예정");//글쓰기 요청 처리(post 파라미터 받고 db에 insert)
+            
+    //파라미터 받기
+    var postData="";
+    request.on("data",function(param){//클라이언트의 데이터가 도착하면
+        // console.log("param is ", ""+param);
+        postData  = postData+param;
+    });
+
+    request.on("end",function(){//모든 데이터를 다 받은 후 마지막 동작
+        console.log("최종 요청 데이터는", postData); 
+        var result = qs.parse(postData);
+        console.log(result.title,result.writer, result.content);//최종 데이터 파싱
+    });
+
+    response.writeHead(200,{"Content-type":"text/html;charset=utf-8"});//헤더 정보 구성
+    response.end("글쓰기 완료");//body
+}
 
 //서버 가동
 server.listen(7979,function(){
