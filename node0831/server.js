@@ -8,16 +8,23 @@
 //var은 변수 선언시 var을 쓰면 중복선언을 허용해줌 let은 중복을 허용하지 않음 
 var http = require("http");//내부모듈
 let express = require("express");//외부 모듈
-
+let mysql = require("mysql")
 let app = express();//express 객체생성
 
 //express 모듈은 미들웨어라 불리는 함수를 지원하여, 기능을 확장할 수 있다. 
 app.use("/static",express.static("res"));//미들웨어 등록, res라는 디렉토리를 정적자원의 위치로 등록 use(가상주소, static파일이 있는 폴더 )
+app.use(express.urlencoded({extended:true}));//post방식의 데이터를 받기위한 미들웨어 등록
 
 //express 모듈을 이용할 경우 요청처리도 express 모듈로 처리하면 된다.
 app.get("/main",function(request, response){//(주소,)
     console.log("클라이언트 요청 감지")
 });
+
+app.post("/board/regist",function(request,response){
+    console.log(request.body.title, request.body.writer);
+    //curl -d "title=test&writer=batman" -X POST http://localhost:8888/board/regist cmd
+});
+
 
 let server = http.createServer(app);
 
